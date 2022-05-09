@@ -1,0 +1,526 @@
+. Maneiras de estilização de Componentes
+
+1. Inline
+2. Classes
+3. CSS in JS
+
+1. Inline
+     
+const divStyle = {
+     color: 'blue',
+     backgroundImage: 'url(' + imgUrl + ')'
+};
+
+function HelloWorldComponent() {
+    return <div style={divStyle}>Hello World!</div>
+}
+
+ou
+
+function App() {
+     return (
+           <HelloWorld style={{ marginTop: '10px' }} />
+)
+}
+
+. Prós
+- maneira mais prática e direta
+- ajustes rápidos
+- testes de estilo
+
+. Contras
+- Dificil manutenção
+
+. Classes
+
+.div-style {
+   color: blue;
+   background: url('https://bit.ly/2L8xxHz');
+}
+
+import '.HelloWorldComponent.css';
+
+function HelloWorldComponent() {
+    return <div className="div-style">Hello World!</div>
+
+Prós e Contras
+. Em JSX, define-se classes pelo atributo className
+- maneira prática e direta
+Contras
+- Dificil Manutenção
+- Pouca Flexibilidade
+- Conflitos com Nomes
+
+CSS in JS
+npm install --save styled-components
+- mais utilizado no universo do reactJS
+
+const DivStyle = styled.div'
+   color: blue;
+   background: url('${props => props.imageUrl}');
+';
+
+function HelloWorldComponent() {
+    const url = 'https://bit.ly/2L8xxHz';
+    return <DivStyle imageUrl={url}>Hello World</DivStyle>;
+}
+
+prós e contras:
+
+- Manutencao
+   - facilidade para remover CSS
+   - estilos dinâmicos
+- Performance
+- Injeção automática de prefixos vendor
+
+
+.STATEFUL e STATELESS
+- stateful: usa estados (possui gerenciamento de estado do componente)
+   - geralmente é criado com classe
+- stateless: não usa estados
+
+. STATELESS
+- não possui gerenciamento de estados no componente
+- construídos usando funções em JS
+
+. STATEFUL VS STATELESS
+- A nomenclatura foi atualizada
+	- Class Components
+	- Function Components
+- Com hooks, estados são manipuláveis em function components!
+
+.FORMULÁRIOS
+	- mantém os estados
+
+- em html <input>, <textarea> e <select> tem estado interno.
+- Em react podemos controlar os estados
+	- state
+	- setState
+- Componente controlado
+	- podemos mudar usando atributo onChange
+        - O Estado dos elementos do FORM são gerenciados pelo componente. Sendo assim, você pode estabelecer regras de validação dos campos do FORM.
+
+- Componente não controlado
+	- a tag input é read-only
+        - o input do elemento do FORM é armazenado no DOM, não no componente.
+
+- Bibliotecas
+	- Formik
+	- Redux-Forms
+
+. sobre o YARN
+- npm install --global yarn
+- Yarn é melhor do que o npm
+- yarn init
+- yarn add -D serve
+- yarn start
+- Ctrl+Z stop server (?)
+- npx kill port 3000
+
+Something is already running on port 3000.
+- use: taskkill -f -im node.exe
+ 
+FLUX E REDUX
+. Facebook criou o Flux
+. Padrão de projeto para tráfego de dados de maneira unidirecional
+. ACTION->DISPATCHER->STORE->VIEW->ACTION...
+. ACTION é como um telegrafo: ele formata a mensagem a ser enviada
+. DISPATCHER é como uma telefonista. Ele sabe todos os callbacks para diferentes stores.
+. STORE é como um gerente super controlador. Ela guarda os estados e altera os estados, mais ninguém.
+. VIEW é um gerente intermediário (não é a tela). (middleware) que recebe as notificações da STORE e passa os dados para as visões dela.
+. Implementações de FLUX:
+- Redux (mais popular)
+- Reflux
+- Mobx
+- Vuex
+- NgRx/Store
+. You'll know when you need them. Dan Abramov.
+
+REDUX:
+. Não tem DISPATCHER
+. Camada VIEW é chamada de REACT
+. REACT-> ACTION -> <-STORE -> REDUCER
+
+Princípios:
+1. Single source...única store
+2. state é read-only
+3. mudanças são feitas com pure-functions (estado é imutável)
+
+ACTIONS:
+. Actions do Redux são como as do Flux
+. Actions não enviam mensagens para o DISPATCHER, porque não tem isso.
+. Actions retornam um objeto formatado.
+
+STORE:
+. Uma única STORE
+. A STORE aqui cuida de toda a árvore de estados
+. Os REDUCERS que cuidam de descobrir qual estado muda.
+
+REDUCER:
+. Em Redux não há DISPATCHER
+. A STORE se conecta ao root REDUCER, que divide os estados em pequenos REDUCERS para descobrir como lidar com esse estado
+. Os estados aqui são imutáveis.
+
+VIEWS:
+. Em React, adiciona na camada de VIEW 3 novos conceitos para conectar a VIEW à STORE:
+1. PROVIDER
+2. CONNECT()
+3. SELECTOR
+
+REST HTTP com REACT
+
+APIs HTTP:
+.GET
+.POST
+.DELETE
+.PUT
+.Fetch API - Nativa dos Browsers
+	- Alternativa ao XMLHttpRequest() e JQuery.ajax()
+	- Suporta Service Workers
+	- não envia nem recebe cookies
+	- não rejeita o status HTTP
+.Axios - Lib HTTP para React
+
+Exemplo Fetch API:
+GET:
+fetch(url do servidor)
+   .then(response => response.json())
+   .then(data => {
+      alert('conheça algumas cientistas brasileiras: ${data}');
+})
+   .catch(error => {
+     alert('Ops! Erro a seguir: ' + error);
+})
+
+POST:
+const novaCientista = { nome: 'Helieth Saffioti', area: 'Letras' };
+fetch(url do servidor, {
+    method: 'post',
+    body: JSON.stringify(novaCientista)
+})
+   .then(response => response.json())
+   .then(data => {
+      alert('conheça algumas cientistas brasileiras: ${data}');
+})
+   .catch(error => {
+     alert('Ops! Erro a seguir: ' + error);
+})
+
+DELETE:
+
+const novaCientista = { nome: 'Sonia Guimaraes', area: 'Fisica' };
+fetch(url do servidor, {
+    method: 'delete'
+})
+   .then(response => response.json())
+   .then(data => {
+      alert('conheça algumas cientistas brasileiras: ${data}');
+})
+   .catch(error => {
+     alert('Ops! Erro a seguir: ' + error);
+})
+
+com AXIOS:
+
+. Lib de HTTP API
+. CrossBrowser
+. pode monitorar o progresso de um request
+. melhor tratamento de erros
+. melhor teste.
+
+GET:
+import axios from 'axios';
+
+axios.get(url do servidor)
+   .then(data => {
+         alert('conheça algumas cientistas brasileiras: ${data}');
+})
+   .catch(error => {
+     alert('Ops! Erro a seguir: ' + error);
+})
+
+POST:
+import axios from 'axios';
+
+axios.post(url do servidor, {
+    nome: 'Heleieth Saffioti',
+    area: 'letras'
+})
+   .then(data => {
+         alert('conheça algumas cientistas brasileiras: ${data}');
+})
+   .catch(error => {
+     alert('Ops! Erro a seguir: ' + error);
+})
+
+DELETE:
+import axios from 'axios';
+
+axios.delete(url do servidor/4)
+   .then(data => {
+         alert('conheça algumas cientistas brasileiras: ${data}');
+})
+   .catch(error => {
+     alert('Ops! Erro a seguir: ' + error);
+})
+
+PUT: PARA ATUALIZAÇÃO
+import axios from 'axios';
+
+axios.put(url do servidor/3, {
+		nome: 'Sonia Guimaraes', 
+		area: 'Fisica'})
+   .then(data => {
+         alert('conheça algumas cientistas brasileiras: ${data}');
+})
+   .catch(error => {
+     alert('Ops! Erro a seguir: ' + error);
+})
+
+
+.IMUTABILIDADE
+- Uma vez criada uma coleção não pode ser alterada
+- Novas coleções podem ser criadas a partir de uma coleção anterior
+- Novas coleções são criadas usando o máximo possível da estrutura original
+- BENEFICIOS
+	- Performance
+	- Programação mais simples
+	- Debugging mais simples
+
+class CounterButton extends React.Component {
+   constructor(props) {
+       super(props);
+       this.state = {count: 1};
+
+Imutable.js
+
+const SomeRecord = Immutable.Record({ foo: null });
+const x = new SomeRecord({ foo: 'bar' });
+const y = x.set('foo', 'baz');
+const z = x.set('foo', 'bar');
+
+x === y; // false
+x === z; // true
+
+- Imutabilidade é um pré-requisito no Redux
+	- Redux e React-Reduz utilizam comparações rasas;
+	- Manipulação de dados mais segura (por causa das estruturas imutáveis)
+	- Time-travel debbuging (por causa das estruturas imutáveis)
+
+- os Reducers dividem o objeto de estados em dom;inios por uma chave
+- CombineReducers checa mudanças usando comparaçào rasa
+   1. fazem a interação nos reducers
+   2. criam um novo obeto de estados a partir dos estados retornados por cada reducer
+
+- Connect gera componentes que fazem comparação rasa com o estado do root
+- retornam o valor para a função mapStateToProps, verificando aqueles que precisam de uma operação de re-render
+
+. Porque não funciona com objetos mutáveis
+
+REDUX Middleware
+
+- Provê uma camada entre o disparo de uma ação e o momento que ela atinge o reducer
+- Utilizados por várias funçÕes inclusive a API de Serviços
+
+MIDLEWARES
+- Redux-Thunk (pensei)
+
+yarn add redux-thank
+
+function some_function() {
+
+
+- Redux-Saga
+
+.TDD e BDD com JEST
+
+- TDD - Test-Driven Development (Desenvolvimento Orientado a Testes)
+	- Escrever código pra testar o código (antes da funcionalidade) 
+	- Não descarta a presença de um tester (profissional de QA)
+	- Você escreve um teste que falha
+        - Faz o código trabalhar (um teste com sucesso)
+	- Elimina a redundância
+	- Teste unitário (Função/Componente/Página)
+        - Teste End-to-End (E2E) - ponta a ponta (ex: teste de fluxo)
+        - Bibliotecas:
+	- JEST
+	- React-Testing-Library (recomendável)
+	- Shallow
+	- Enzyme
+	- Chai (TDD e BDD)
+	- Mocha (FLuxo)
+	- Selenium
+	- Puppeteer (Browse)
+
+// soma.js
+function soma ( a,b ) {
+   return a + b;
+}
+
+
+Jasmine
+
+describe('A suite is just a function', function() {
+   var a;
+
+   it('and so is a spec', function() {
+   a = true;
+ 
+   expect(a).toBe(true);
+});
+});
+
+
+como fica:
+
+import { soma } from './soma';
+
+describe('testando função soma', () => {
+        it('A soma deve dar 3', () => {
+           const res = soma(1, 2);
+           expect(res).toBe(3);
+        })
+})
+
+. Como testar um componente:
+
+yarn add --dev @testing-library/react
+
+#para extensões de comparação no jest
+yarn add --dev @testing-library/jest-dom/extend-expect
+
+. Componente chamado Basic:
+
+import React from 'react';
+
+cont Basic = (props) => (
+
+     <p>Meu nome é {props.name}</p>
+)
+
+export default Basic;
+
+. como testar:
+
+import React from 'react';
+import Basic from './Basic';
+import { render } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
+
+describe('Testando Basic', () => {
+      it('O Componente Basic deve renderizar corretamente', () => {
+      const { baseElement } = render(<Basic name="Lilith" />;
+      expect(baseElement).toHaveTextContent('Meu nome é Lilith');
+})
+})
+
+.como testar um componente que usa Redux
+	- vamos criar uma STORE de teste (PROVIDER)
+        - fazer um REAPER(?) só pra testar esse componente
+        - se for o caso criar um CONTEXT ou um ROUTER se for necessário
+
+        describe('Testando Counter', () => {
+           it('O componente counter deve renderizar corretamente', () => {
+        const { getByTestId, getByText } = renderWithRedux(<Counter />)
+	fireEvent.click(getByText('+'))->  aciona um botão por exemplo
+        expect(getByTestId('count-value').textContent).toBe('1')
+})
+})
+        - Muitas aplicações exigem 70% de cobertura.
+
+
+BDD - Behavior-Driven Development
+- Seria um TDD plus
+- Teste de especificação
+    - Une tudo
+- Sintaxe de steps para definir cenários
+   . sintaxe Gherkin
+- Descreve cada funcionalidade por featute (caso de uso)
+
+- Dado, Quando, E, Então, Funcionalidade, Cenário são palavras reservadas do BDD
+
+Bibliotecas:
+- Jest-cucumber
+- Chai
+
+yarn add --dev jest-cucumber
+
+soma.js
+
+export const soma = (a , b) => a+b;
+
+BDD:
+
+Feature: Somar um Par
+   Soma um par de números
+
+Scenário: soma 1 + 2 resulta em 3
+    Given 1
+    When soma 2
+    Then a soma é 3
+
+. no VSCODE instalar a extensão cucumber
+
+soma.test.js
+
+import { some } from './soma';
+import { defineFeature, loadFeature } from 'jest-cucumber';
+const feature = loadFeature('./src/aula-4/parte-1/components/soma/soma.feature');
+
+describe('testando função soma', () => {
+	it('A soma deve dar 3', () => {
+           const res = soma(1,2);
+           expect(res).toBe(3);
+})
+})
+
+defineFeature(feature, test => {
+     test('soma 1 + 2 resulta em 3',  ({ given, when, then }) => {
+
+     let x;
+     let y;
+
+     given('1', () {
+         x = 1;
+     });
+
+     when('soma 2', () => {
+       z= soma(x,2);
+     });
+
+     then('a soma é 3', () => {
+        expect(z).toBe(3);
+     });
+   });
+});
+
+.DEBBUGING
+- processo de encontrar e reduzir defeitos em um software
+- Ferramentas para debbuging código REACT
+	- Chrome Devtools
+	- Redux Devtools
+	- React Devtools
+
+.TRATAMENTO DE ERROS
+ - Resiliência do Software
+ - Segurança
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+

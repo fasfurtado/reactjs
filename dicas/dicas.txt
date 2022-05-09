@@ -1,0 +1,101 @@
+. react é uma biblioteca e não um framework
+
+. a principal função é a criação da interface para o usuário
+
+. o core dele é modular
+
+. é uma linguagem declarativa, não imperativa
+
+. JSX
+
+- Posso executar funções ou definir variáveis dentro do JSX
+
+. React não separa as tecnologias colocando marcações em arquivos separados, e sim separa conceitos e mantém o código pouco acoplado chamando-os de componentes.
+
+. Não é obrigatório o uso do JSX.
+
+.syntax suggar para React.createElement
+
+. o Browser não interpreta o JSX, precisa de um transpilador. Pode ser o Babel (mais utilizado)
+
+O que é o JSX:
+
+react trabalha com virtualDOM
+
+.react pensa como a interface deve esar a cada momento ao invés de alterá-la com o tempo, o que faz ter ganho de performance e evita uma série de erros.
+
+CICLO DE VIDA
+Inicializacao
+Montagem
+Atualização
+Desmontagem
+
+https://github.com/Tautorn/introduction-reactjs
+
+WEBPACK
+module bundler (empacotador de módulos para aplicações JS)
+https://webpack.js.org
+
+Entry Point - Utilizando grapho, o webpack precisa saber o ponto de entrada para buscar os modulos e dependencias
+
+Output Point - para determinar quais os bundlers irá emitir
+
+Loaders - permitir que o webpack gerencie outros tipos de arquivos
+
+Plugins - pacotes de minificação, etc
+
+Mode - tipos de configurações. production, development ou none (módulos defaults)
+
+Development - Uglify, Concatenation e None
+
+.para criar o webpack.config.js
+
+npm i -D webpack webpack-cli
+
+"build":"webpack --mode production"
+
+npm i @babel/core babel-loader @babel/preset-env @babel/preset-react --save-dev
+
+npm i -D webpack-dev-server
+
+"scripts": {
+   "start:dev":"webpack-dev-server"
+}
+
+RENDERIZAÇÃO CONDICIONAL
+
+. Em react, você pode criar componentes distintos que encapsulam o comportamento que você precisa.
+Então, você pode renderizar apenas alguns dos elementos, dependendo do estado da sua aplicação.
+
+https://pt-br.reactjs.org/docs/conditional-rendering.html
+
+. Variáveis de elementos
+. if inline com o operador lógico &&
+. if-else inline com operador condicional
+.evitando que um componente seja renderizado
+
+. Manipulando eventos
+
+- semelhante aos eventos do DOM
+- são nomeados usando CamelCase ao invés de letras minúsculas
+- com o JSX você passa uma função como manipulador de eventos ao invés de um texto.
+
+pensamento reactJS:
+
+. comece com um Mock
+. separe a UI em uma herarquia de componentes
+. crie uma versão estática em React
+. identifique a representação mínima (mas completa) do state da UI
+. identifique onde o state vai ficar
+. adicione o fluxo de dados inverso.
+
+
+
+
+
+
+
+
+
+
+

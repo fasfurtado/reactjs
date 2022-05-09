@@ -1,0 +1,259 @@
+. REACT+REDUX
+. GERENCIANDO ESTADOS DE COMPONENTES EM OUTRO NÍVEL
+
+- REACT - A javascript library for building user interfaces
+
+- Declarativo
+- Baseado em componentes
+- Reusabilidade
+
+- REDUX
+- A predictable state containier for JS Apps
+- Previsível
+- Centralizado
+- Debugável
+- Flexível
+
+. REDUX herdou linguagem ELM
+- imutabilidade
+- API Declarativa
+- Operações deterministicas
+- Controlar side-effects (quando não se pode evitá-los)
+
+
+- CONTEXTO POR TRÁS DO REDUX
+- Arquitetura FLUX
+	- Fluxo Unidirecional
+	- VIEW -> ACTIONS -> DISPATCHER -> STORE -> VIEW
+- Arquitetura REDUX
+	- VIEW -> ACTIONS -> REDUCER -> STORE -> VIEW
+- Os três princípios do REDUX
+	- Uma única fonte de verdade
+	- Estado disponível apenas para leitura
+	- Mundanças no estado são feitas apenas por funções puras
+	- reducer: store.getState()
+	- Quando se cria um reducer estamos criando um estado novo de acordo com a ação (action)
+	
+Exemplo:
+
+	function counter Reducer(state = { value: 0 }, action) {
+		switch (action.type) {
+			case 'counter/incremented':
+				return { value: state.value + 1 }
+			case 'counter/decremented':
+				return { value: state.value - 1 }}
+			default:
+				return state
+		}
+	}
+
+	- store: createStore()
+	- reducer: store.getState()
+
+Exemplo:
+	const store = createStore(counter: counterReducer);
+
+	- store: createStore()
+	- reducer: store.getState()
+	- actions: store.dispatch()
+
+Exemplo:
+	store.dispatch({ type: 'counter/incremented' }) //{value: 1}
+	store.dispatch({ type: 'counter/incremented' }) //{value: 2}
+	store.dispatch({ type: 'counter/decremented' }) //{value: 1}
+
+	- store: createStore()
+	- reducer: store.getState()
+	- actions: store.dispatch()
+	- view: connect(react-redux)
+
+Exemplo:
+	TodoList.js
+
+	function TodoList() {
+		return (
+			// renders something
+		)
+	}
+
+	function mapStateToProps(state) {
+		return { todoList: state.todos.allIds };
+	}
+
+	export default connect(mapStateToProps)(TodoList);
+	// connect conecta com a store do redux
+	// mapStateToProps tem função de expor propriedades deste componente
+
+	function TodoList({todoList, dispatch})
+		return (
+			// ... renders something and dispatch an action
+		)
+	}
+
+
+	function mapDispatchToProps (dispatch) {
+		return {
+			toogleTodo: (id) => dispatch ({ type:  'todos/toogle',  payload: id }),
+		}
+	}
+
+	export default connect(mapStateToProps, mapDispatchtoProps)(TodoList)
+
+Obs:
+	return ( .... )  retorna alguma variável ou valor
+	return { ...  }  retorna alguma função
+
+
+	- store: createStore()
+	- reducer: store.getState()
+	- actions: store.dispatch()
+	- view: connect(react-redux)
+		- selectors // são funções que retornam os estados
+
+Exemplo:
+	function selectTodoList(state) {
+		return state.todos.allIds;
+	}
+
+	function mapStateToProps(state) {
+		return { 
+			todoList: selectTodoList(state)
+		}
+	}
+
+
+Middlewares:
+"It provides a third-party extension point between dispatching an action, and the moment it reaches the reducer"
+
+- Conceito de middlewares foi introduzido no redux como uma forma de estender pontos de como uma store vai reagir entre o dispatch e uma action, e a leitura do redux daquela action.
+
+Exemplo:
+
+	type MiddlewareAPI = { dispatch: Dispatch, getState: () => State }
+	type Middleware = (api: MiddlewareAPI) => (next: Dispatch => Dispatch)
+
+ exemplo:
+
+	function logger({ getState }) {
+		return next => action => {
+			console.log('will dispatch', action)
+			const returnValue = next(action)
+			console.log('state after dispatch', getState())
+			return returnValue
+		}
+	}
+
+
+	const store = createStore(reducer, {}, applyMiddleware(logger))
+
+	type StoreEnhancer = (next: StoreCreator)  =>  StoreCreator
+
+	const store = createStore(reducer, {}, applyMiddleware(logger))
+
+. COMEÇANDO UM PROJETO REDUX
+	
+
+	- PROVIDER (state provider)
+		 - recurso que permite você conectar seus componentes ao estado
+		- é um componente responsável por passar a instancia da store para os componentes filhos, e torna o estado global que pode ser acessado por todos os componentes
+		- assim não é necessário importar a store da pasta redux, e pode-se conectar a store e acessar seus valores de estado e de dispatch
+
+exemplo:
+	reactDOM.render(
+		<React.StrictMode>
+		<Provider store=(store)>
+			<App />
+		</Provider>
+		<React.StrictMode>
+		document.getElementById(elementId: 'root')
+        );
+			
+	
+- REDUXJS / TOOLKIT
+	
+	- npm install @reduxjs/toolkit
+	- yarn add @reduxjs/toolkit
+
+. configureStore (redux-thunk + redux DevTools Extension) - função nova que absorve createSTore
+
+	- createReducer(immer.js)
+	- createAction
+	- createSlice (reducers + actions)
+	- createSelector(reselect)
+
+- ALTERNATIVAS DE STATE CONTAINERS
+
+	- Context API (React)
+	- Recoil (FB)
+	- MobX (redux-saga, RxJS)
+	- XState
+
+
+- PRÓS E CONTRAS DE STATE CONTAINERS
+	- Simplifica problemas de data-flow complexos
+	- Pontos únicos de controle de estado
+
+	- Complica problemas de data-flow simples
+
+
+. GERENCIANDO A STORE DO REDUX
+
+	- window.___Redux_DEVTOOLS_EXTENSION __ (Google Chrome)
+	- redux-devtools-extension
+
+	- npm install --save redux-dev-tools-extension
+	- yarn add redux-devtools-extension
+
+. MELHORES PRÁTICAS
+
+	- Redux Style Guide
+	- priority A
+		- Do not Mutate State
+		- Reducers Must Not Have Side Effects
+		- Do not put Non-Serializable Values in State or Actions
+		- Only One Redux Store per App
+	
+	- Design Patterns 
+
+		- Ducks Pattern: "To me, it makes more sense for these pieces to be bundled together in an isolated module that is self contained, ad can even be packaged easily into a library"
+
+		1. MUST export default a function called reducer()
+		2. MUST export its action creators as functions
+		3. MUST have action types in the form
+			npm-module-or-app/reducer/ACTION_TYPE
+		4. MAY export its action types as UPPER_SNAKE_CASE, if an external reducer needs to listen for them, or if it is a published reusable library
+
+	- Higher-Order-Reducers
+		
+. COMPONENT CONTAINERS
+
+	- Forma de encapsular a lógica em containers (componentes react que integram a store e são controlados)
+	- Pode-se utilizar técnicas de renderização atuais
+	- Por exemplo: Hooks
+	
+. HOOKS EVERYWHERE
+
+	- Pode-se utilizar os hooks ao invés de connect
+	- Existe hook de SELECTOR
+	
+	
+ . TRABALHANDO COM STATES & EFFECTS NO REACTJS
+
+. HOOKS (gancho)
+	- É uma função que se engancha no seu componente
+	- Toda vez que o seu componente sofrer algum click ou atualização o hook vai ser executado
+	- garagemdigital.io/react-hooks-o-que-sao/
+	- hooks-intro - reactjs.org
+	- hooks não são obrigatórios mas facilitam o trabalho
+
+. CRIANDO SEU PROJETO
+	- npx create-react-app aula
+
+ 	
+
+
+
+	
+
+
+ 
